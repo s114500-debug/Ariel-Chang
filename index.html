@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logos | 理性專注空間</title>
+    <style>
+        :root {
+            --bg-base: #ebf0ee;         /* 莫蘭迪灰綠底色 */
+            --text-main: #233029;       /* 深石墨綠 */
+            --text-muted: #617369;      /* 霧灰綠 */
+            --accent-green: #4a5f53;    /* 核心莫蘭迪深綠 */
+            --card-bg: #ffffff;         /* 純白字卡 */
+            --border-light: #dae2de;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.8rem;
+            padding: 35px 25px;
+            border-radius: 28px;
+            background-color: var(--card-bg);
+            box-shadow: 0 20px 50px rgba(35, 48, 41, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        /* 每日邏輯語錄區 */
+        .quote-box {
+            background-color: #f8faf9;
+            padding: 18px 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            width: 100%;
+            min-height: 85px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quote-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-main);
+            letter-spacing: 0.04em;
+            text-align: center;
+        }
+
+        /* 科目自訂選擇區 */
+        .subject-box {
+            width: 100%;
+            background-color: #f8faf9;
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .subject-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .subject-select-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        select, input {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+            color: var(--text-main);
+            background-color: #ffffff;
+            outline: none;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--accent-green);
+        }
+
+        select {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        input {
+            width: 110px;
+        }
+
+        .custom-btn {
+            background-color: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .current-status-tag {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-green);
+            letter-spacing: 0.05em;
+        }
+
+        /* 模式切換按鈕 */
+        .mode-container {
+            display: flex;
+            background-color: rgba(74, 95, 83, 0.08);
+            padding: 5px;
+            border-radius: 50px;
+            gap: 4px;
+        }
+
+        .mode-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 24px;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn.active {
+            background-color: var(--accent-green);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(74, 95, 83, 0.2);
+        }
+
+        /* 療癒控制盤計時器 */
+        .timer-wrapper {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #f8faf9;
+            border-radius: 50%;
+            border: 6px solid rgba(74, 95, 83, 0.06);
+        }
+
+        .time-display {
+            font-size: 3.6rem;
+            font-weight: 200;
+            font-family: monospace, sans-serif;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        /* ======= 100% 安全、持續平滑消耗的純 CSS 橫向進度條 ======= */
+        .progress-bar-container {
+            width: 140px;                  /* 固定寬度，精緻不粗糙 */
+            height: 4px;                   /* 極簡細線設計 */
+            background-color: rgba(74, 95, 83, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 100%;                  /* 初始全滿 */
+            background-color: var(--accent-green);
+            border-radius: 2px;
+            /* 一秒鐘的線性平滑過渡，讓它看起來不是一格格跳動，而是像沙漏一樣持續滑動 */
+            transition: width 1s linear; 
+        }
+
+        /* 控制按鈕 */
+        .control-group {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .control-btn {
+            background-color: #ffffff;
+            border: 1px solid var(--border-light);
+            color: var(--text-main);
+            padding: 12px 36px;
+            font-size: 0.95rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
+            letter-spacing: 0.1em;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: var(--text-main);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        #startBtn {
+            background-color: var(--accent-green);
+            color: white;
+            border: none;
+        }
+
+        /* 歷史統計數據看板 */
+        .history-box {
+            width: 100%;
+            background-color: #f8faf9;
+            padding: 18px;
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+        }
+
+        .history-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .clear-log-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            max-height: 130px;
+            overflow-y: auto;
+        }
+
+        .history-card {
+            background: #ffffff;
+            padding: 10px 14px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border-light);
+        }
+
+        .history-subject {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .history-time {
+            font-size: 0.85rem;
+            font-family: monospace;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="quote-box">
+            <p class="quote-text" id="quoteText">正在載入專注常數...</p>
+        </div>
+
+        <div class="subject-box">
+            <div class="subject-label">🎯 當前專注目標</div>
+            <div class="subject-select-row">
+                <select id="subjectSelect" onchange="updateSubject()">
+                    <option value="國文">國文 (預設)</option>
+                    <option value="英文">英文 (預設)</option>
+                    <option value="數學">數學 (預設)</option>
+                    <option value="物理">物理 (預設)</option>
+                    <option value="化學">化學 (預設)</option>
+                    <option value="生物">生物 (預設)</option>
+                    <option value="歷史">歷史 (預設)</option>
+                    <option value="地理">地理 (預設)</option>
+                </select>
+                <input type="text" id="customSubjectInput" placeholder="新科目..." maxlength="8">
+                <button class="custom-btn" onclick="addCustomSubject()">設定</button>
+            </div>
+            <div class="current-status-tag">目前鎖定：<span id="currentSubjectTag">國文</span></div>
+        </div>
+
+        <div class="mode-container">
+            <button class="mode-btn active" id="workBtn" onclick="changeMode('work')">FOCUS 25m</button>
+            <button class="mode-btn" id="breakBtn" onclick="changeMode('break')">BREAK 5m</button>
+        </div>
+
+        <div class="timer-wrapper">
+            <div class="time-display" id="timeStr">25:00</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <button class="control-btn" id="startBtn" onclick="triggerTimer()">開始</button>
+            <button class="control-btn" onclick="resetTimer()">重設</button>
+        </div>
+
+        <div class="history-box">
+            <div class="history-title-row">
+                <span class="subject-label">📊 歷史累積專注時數</span>
+                <button class="clear-log-btn" onclick="clearHistory()">重置時數</button>
+            </div>
+            <div class="history-grid" id="historyGrid">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        const quotes = [
+            "無法量化或定義的問題，就無法被精準地解決。",
+            "情緒是演化的信號，而理性是決定如何回應的作業系統。",
+            "策略性停損，是為了將邊際效益最大化的必要理性選擇。",
+            "專注並非拒絕思考，而是將有限的資源優化配置於核心目標。",
+            "自律的本質，是用長期的預期價值取代短期的即時回饋。",
+            "邏輯能釐清混亂的現狀，而執行力負責拉近與目標的距離。",
+            "把複雜的系統拆解成可控的變數，焦慮就會被公式解析。",
+            "時間是最公平的恆定常數，改變產出質量的唯一變數是專注度。"
+        ];
+
+        let timer;
+        let isRunning = false;
+        let mode = 'work'; 
+        let timeLeft = 25 * 60;
+        let totalTime = 25 * 60;
+        let currentSubject = "國文";
+
+        let studyLog = JSON.parse(localStorage.getItem('pomodoro_study_log')) || {
+            "國文": 0, "英文": 0, "數學": 0, "物理": 0, "化學": 0, "生物": 0, "歷史": 0, "地理": 0
+        };
+
+        window.onload = () => {
+            refreshQuote();
+            loadDropdownOptions();
+            updateSubject();
+            renderHistory();
+            render();
+        };
+
+        function refreshQuote() {
+            document.getElementById('quoteText').textContent = `“ ${quotes[Math.floor(Math.random() * quotes.length)]} ”`;
+        }
+
+        function updateSubject() {
+            currentSubject = document.getElementById('subjectSelect').value;
+            document.getElementById('currentSubjectTag').textContent = currentSubject;
+        }
+
+        function addCustomSubject() {
+            const inputEl = document.getElementById('customSubjectInput');
+            const value = inputEl.value.trim();
+            if (!value) return;
+
+            const selectEl = document.getElementById('subjectSelect');
+            let exists = false;
+            for (let i = 0; i < selectEl.options.length; i++) {
+                if (selectEl.options[i].value === value) { exists = true; selectEl.selectedIndex = i; break; }
+            }
+
+            if (!exists) {
+                const newOpt = document.createElement('option');
+                newOpt.value = value;
+                newOpt.textContent = value;
+                selectEl.appendChild(newOpt);
+                selectEl.value = value;
+                
+                if (!(value in studyLog)) {
+                    studyLog[value] = 0;
+                    saveData();
+                }
+            }
+            inputEl.value = "";
+            updateSubject();
+            renderHistory();
+        }
+
+        function loadDropdownOptions() {
+            const selectEl = document.getElementById('subjectSelect');
+            Object.keys(studyLog).forEach(sub => {
+                let exists = false;
+                for (let i = 0; i < selectEl.options.length; i++) {
+                    if (selectEl.options[i].value === sub) { exists = true; break; }
+                }
+                if (!exists) {
+                    const newOpt = document.createElement('option');
+                    newOpt.value = sub;
+                    newOpt.textContent = sub;
+                    selectEl.appendChild(newOpt);
+                }
+            });
+        }
+
+        function changeMode(targetMode) {
+            if (mode === targetMode) return;
+            mode = targetMode;
+            document.getElementById('workBtn').classList.toggle('active', mode === 'work');
+            document.getElementById('breakBtn').classList.toggle('active', mode === 'break');
+            totalTime = (mode === 'work') ? 25 * 60 : 5 * 60;
+            haltTimer();
+            timeLeft = totalTime;
+            render();
+        }
+
+        function triggerTimer() {
+            if (isRunning) {
+                haltTimer();
+            } else {
+                isRunning = true;
+                document.getElementById('startBtn').textContent = '暫停';
+                timer = setInterval(() => {
+                    timeLeft--;
+                    render();
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        isRunning = false;
+                        document.getElementById('startBtn').textContent = '開始';
+                        if (mode === 'work') {
+                            studyLog[currentSubject] = (studyLog[currentSubject] || 0) + 25;
+                            saveData();
+                            renderHistory();
+                        }
+                        refreshQuote();
+                        alert(mode === 'work' ? `【${currentSubject}】專注完成！已累積記錄 25 分鐘。` : '休息結束！');
+                        changeMode(mode === 'work' ? 'break' : 'work');
+                    }
+                }, 1000);
+            }
+        }
+
+        function haltTimer() {
+            clearInterval(timer);
+            isRunning = false;
+            document.getElementById('startBtn').textContent = '開始';
+        }
+
+        function resetTimer() {
+            haltTimer();
+            timeLeft = totalTime;
+            render();
+        }
+
+        function renderHistory() {
+            const gridEl = document.getElementById('historyGrid');
+            gridEl.innerHTML = "";
+            Object.keys(studyLog).forEach(sub => {
+                const mins = studyLog[sub];
+                const displayStr = mins >= 60 ? `${(mins / 60).toFixed(1)}h` : `${mins}m`;
+                const card = document.createElement('div');
+                card.className = 'history-card';
+                card.innerHTML = `<span class="history-subject">${sub}</span><span class="history-time">${displayStr}</span>`;
+                gridEl.appendChild(card);
+            });
+        }
+
+        function saveData() { localStorage.setItem('pomodoro_study_log', JSON.stringify(studyLog)); }
+
+        function clearHistory() {
+            if (confirm("確定要將所有科目的累積專注時間歸零嗎？")) {
+                studyLog = { "國文": 0, "英文": 0, "數學": 0, "物理": 0, "化學": 0, "生物": 0, "歷史": 0, "地理": 0 };
+                saveData();
+                const selectEl = document.getElementById('subjectSelect');
+                selectEl.innerHTML = `
+                    <option value="國文">國文 (預設)</option><option value="英文">英文 (預設)</option><option value="數學">數學 (預設)</option>
+                    <option value="物理">物理 (預設)</option><option value="化學">化學 (預設)</option><option value="生物">生物 (預設)</option>
+                    <option value="歷史">歷史 (預設)</option><option value="地理">地理 (預設)</option>
+                `;
+                updateSubject();
+                renderHistory();
+            }
+        }
+
+        function render() {
+            const mins = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            const secs = (timeLeft % 60).toString().padStart(2, '0');
+            const timeString = `${mins}:${secs}`;
+            document.getElementById('timeStr').textContent = timeString;
+
+            document.title = `[${timeString}] ${mode === 'work' ? '讀' + currentSubject : '休息'}`;
+
+            // 精確到每一秒的百分比寬度更新
+            const progress = timeLeft / totalTime;
+            document.getElementById('progressBarFill').style.width = `${progress * 100}%`;
+        }
+    </script>
+</body>
+</html>
